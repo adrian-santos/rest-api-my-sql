@@ -4,9 +4,10 @@ const knex = require('knex')({
   client: 'mysql',
   connection: {
     host: 'localhost',
-    username: 'root',
-    password: 'adriansantos',
-    database: 'employees'
+    user: 'root',
+    password: 'password',
+    database: 'employees',
+    charset: 'utf8'
   }
 });
 
@@ -15,7 +16,7 @@ const server = Hapi.server({
   port: 1234
 });
 
-// Routes
+// Routes - Should be located inside the routes folder
 server.route({
   method: 'GET',
   path: '/employees',
@@ -24,6 +25,21 @@ server.route({
       .select('*')
       .from('employees')
       .limit(10);
+  }
+});
+
+server.route({
+  method: 'POST',
+  path: '/employees/post',
+  handler: (request, h) => {
+    return knex('employees').insert({
+      emp_no: 123456,
+      birth_date: '1993-10-31',
+      first_name: 'Adrian',
+      last_name: 'Santos',
+      gender: 'M',
+      hire_date: '2018-11-13'
+    });
   }
 });
 
