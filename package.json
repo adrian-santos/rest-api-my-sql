@@ -1,0 +1,32 @@
+{
+  "name": "rest-api-my-sql",
+  "version": "1.0.0",
+  "description": "Converting Employees SQL into REST API using Hapi and Knex",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adrian-santos/rest-api-my-sql.git"
+  },
+  "keywords": [
+    "node",
+    "knex",
+    "hapi",
+    "js"
+  ],
+  "author": "adrian-santos",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/adrian-santos/rest-api-my-sql/issues"
+  },
+  "homepage": "https://github.com/adrian-santos/rest-api-my-sql#readme",
+  "dependencies": {
+    "hapi": "^17.8.1",
+    "hapi-pino": "^5.1.0",
+    "knex": "^0.15.2",
+    "nodemon": "^1.18.7"
+  }
+}
