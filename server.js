@@ -1,15 +1,7 @@
 'use strict';
 const Hapi = require('hapi');
-const knex = require('knex')({
-  client: 'mysql',
-  connection: {
-    host: 'localhost',
-    user: 'root',
-    password: 'password',
-    database: 'employees',
-    charset: 'utf8'
-  }
-});
+const connection = require('./knexfile');
+const knex = require('knex')(connection['development']);
 
 const server = Hapi.server({
   host: 'localhost',
@@ -20,7 +12,7 @@ const server = Hapi.server({
 server.route({
   method: 'GET',
   path: '/employees',
-  handler: (request, h) => {
+  handler: () => {
     return knex
       .select('*')
       .from('employees')
@@ -30,16 +22,35 @@ server.route({
 
 server.route({
   method: 'POST',
-  path: '/employees/post',
+  path: '/addEmployee',
   handler: (request, h) => {
-    return knex('employees').insert({
-      emp_no: 123456,
-      birth_date: '1993-10-31',
-      first_name: 'Adrian',
-      last_name: 'Santos',
-      gender: 'M',
-      hire_date: '2018-11-13'
-    });
+    const employee = request.payload;
+
+    const insertEmployee = knex
+      .insert({
+        emp_no: employee.emp_no,
+        birth_date: employee.birth_date,
+        first_name: employee.first_name,
+        last_name: employee.last_name,
+        gender: employee.gender,
+        hire_date: employee.hire_date
+      })
+      .into('employees')
+      .catch(err => console.error(err));
+  }
+});
+
+server.route({
+  method: 'DELETE',
+  path: '/deleteEmployee',
+  handler: (request, h) => {
+    const employee = request.payload;
+
+    console.log(employee.emp_no);
+    const deleteEmployee = knex('employees')
+      .where('emp_no', employee.emp_no)
+      .del()
+      .catch(err => console.error(err));
   }
 });
 
