@@ -8,25 +8,26 @@ const server = Hapi.server({
   port: 1234
 });
 
-// Routes - Should be located inside the routes folder
+// GET
 server.route({
   method: 'GET',
-  path: '/employees',
-  handler: () => {
-    return knex
+  path: '/getEmployees',
+  handler: (request, h) => {
+    return knex('employees')
       .select('*')
-      .from('employees')
-      .limit(10);
+      .limit(10)
+      .catch(err => console.err(err));
   }
 });
 
+// POST
 server.route({
   method: 'POST',
   path: '/addEmployee',
   handler: (request, h) => {
     const employee = request.payload;
 
-    const insertEmployee = knex
+    return knex('employees')
       .insert({
         emp_no: employee.emp_no,
         birth_date: employee.birth_date,
@@ -35,22 +36,61 @@ server.route({
         gender: employee.gender,
         hire_date: employee.hire_date
       })
-      .into('employees')
-      .catch(err => console.error(err));
+      .catch(err => console.error(err))
+      .then(() => {
+        return knex('employees')
+          .select('*')
+          .limit(10);
+      })
+      .catch(err => console.log(err));
   }
 });
 
+// PUT
+server.route({
+  method: 'PUT',
+  path: '/updateEmployee',
+  handler: (request, h) => {
+    const employee = request.payload;
+    const updateEmployee = knex('employees')
+      .update({
+        birth_date: employee.birth_date,
+        first_name: employee.first_name,
+        last_name: employee.last_name,
+        gender: employee.gender,
+        hire_date: employee.hire_date
+      })
+      .where('emp_no', employee.emp_no)
+      .catch(err => console.error(err))
+      .then(() => {
+        return knex('employees')
+          .select('*')
+          .limit(10);
+      })
+      .catch(err => console.log(err));
+
+    return updateEmployee;
+  }
+});
+
+// DELETE
 server.route({
   method: 'DELETE',
   path: '/deleteEmployee',
   handler: (request, h) => {
     const employee = request.payload;
-
-    console.log(employee.emp_no);
     const deleteEmployee = knex('employees')
-      .where('emp_no', employee.emp_no)
       .del()
-      .catch(err => console.error(err));
+      .where('emp_no', employee.emp_no)
+      .catch(err => console.error(err))
+      .then(() => {
+        return knex('employees')
+          .select('*')
+          .limit(10);
+      })
+      .catch(err => console.log(err));
+
+    return deleteEmployee;
   }
 });
 
