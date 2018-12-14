@@ -8,7 +8,9 @@ const server = Hapi.server({
   port: 1234
 });
 
-// GET
+// @route   GET /getEmployees
+// @desc    Gets all Employees
+// @access  Public
 server.route({
   method: 'GET',
   path: '/getEmployees',
@@ -20,7 +22,9 @@ server.route({
   }
 });
 
-// POST
+// @route   POST /addEmployee
+// @desc    Adds an Employee
+// @access  Public
 server.route({
   method: 'POST',
   path: '/addEmployee',
@@ -46,7 +50,9 @@ server.route({
   }
 });
 
-// PUT
+// @route   PUT /updateEmployee
+// @desc    Updates an Employee Record
+// @access  Public
 server.route({
   method: 'PUT',
   path: '/updateEmployee',
@@ -73,7 +79,9 @@ server.route({
   }
 });
 
-// DELETE
+// @route   DELETE /deleteEmployee
+// @desc    Adds an Employee
+// @access  Public
 server.route({
   method: 'DELETE',
   path: '/deleteEmployee',
@@ -94,6 +102,7 @@ server.route({
   }
 });
 
+// Async Server
 const init = async () => {
   await server.register({
     plugin: require('hapi-pino'),
